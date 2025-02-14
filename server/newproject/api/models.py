@@ -1,10 +1,14 @@
 from django.db import models
 
-# models.Models is how you use the Django model class to create a model
-class Book(models.Model):
-    title = models.CharField(max_length=100) #set to string with charfield
-    release_year = models.IntegerField() #set to integer with integerfield
+class Todo(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    due_date = models.DateField()
+    start_time = models.TimeField(null=True, blank=True)
+    end_time = models.TimeField(null=True, blank=True)
+    completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self): #this is a string representation of the model
-        return self.title #return the title of the book
-    
+    def __str__(self):
+        return self.title
+

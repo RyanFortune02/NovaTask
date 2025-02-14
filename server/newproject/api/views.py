@@ -1,40 +1,50 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Book
-from .serializer import BookSerializer
+from .models import Todo
+from .serializer import TodoSerializer
 
-#Api view decorator @api_view defiens kind of request
-@api_view(['GET']) #get request is for getting data
-def get_books(request):
-    books = Book.objects.all()
-    serializedData = BookSerializer(books, many=True).data
-    return Response(serializedData)
+# Api view decorator @api_view defines the allowed HTTP methods
+@api_view(['GET', 'POST'])
+def todos(request):
+    if request.method == 'GET':
+        # GET request is for retrieving data
+        todos = Todo.objects.all()  # Get all todos from database
+        serializer = TodoSerializer(todos, many=True)  # Convert todos to JSON format
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        # POST request is for creating data
+        serializer = TodoSerializer(data=request.data)  # Convert JSON to Todo format
+        if serializer.is_valid():
+            serializer.save()  # Save the data to database if valid
+            return Response(serializer.data, status=status.HTTP_201_CREATED)  # Return 201 status for successful creation
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # Return errors if data is invalid
 
-@api_view(['POST']) #post request is for creating or changing data, need to add to api urls in urls.py
-def create_book(request):
-    data = request.data #access the data from the request
-    serializer = BookSerializer(data=data) #serialize the data
-    if serializer.is_valid():
-        serializer.save() #save the data to database - if it is valid
-        return Response(serializer.data, status=status.HTTP_201_CREATED) #return the data and status confirming it worked
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['PUT', 'DELETE']) #put request is for updating data, delete request is for deleting data
-def book_detail(request, pk):
+@api_view(['GET', 'PUT', 'DELETE'])
+def todo_detail(request, pk):
+    """
+    Function handles individual todo operations:
+    GET: Retrieve a specific todo
+    PUT: Update a specific todo
+    DELETE: Remove a specific todo
+    """
     try:
-        book = Book.objects.get(pk=pk)  # Attempt to retrieve the book by its primary key
-    except Book.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)  # Return 404 if the book isn't found
+        todo = Todo.objects.get(id=pk)  # Attempt to retrieve the todo by its primary key
+    except Todo.DoesNotExist:
+        return Response({'error': 'Todo not found'}, status=status.HTTP_404_NOT_FOUND)  # Return 404 if todo doesn't exist
 
-    if request.method == 'PUT':
-        data=request.data # Get the updated data from the request
-        serializer = BookSerializer(book, data)  # Initialize the serializer with the existing book and updated data
+    if request.method == 'GET':
+        serializer = TodoSerializer(todo)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = TodoSerializer(todo, data=request.data)  # Combine existing todo with updated data
         if serializer.is_valid():
             serializer.save()  # Save the updated data if validation is successful
-            return Response(serializer.data)  # Return the updated book data
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # Return validation errors with a 400 status
+            return Response(serializer.data)  # Return the updated todo data
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        book.delete()  # Delete the book from the database
-        return Response(status=status.HTTP_204_NO_CONTENT)  # Return a 204 status to indicate successful deletion
+        todo.delete()  # Remove the todo from the database
+        return Response(status=status.HTTP_204_NO_CONTENT)  # Return 204 status to indicate successful deletion

@@ -40,3 +40,73 @@
 .read-the-docs {
   color: #888;
 }
+
+.todo-app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.todo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.todo-form input,
+.todo-form textarea,
+.todo-form select {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.todo-form button {
+  padding: 0.5rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.todo-item {
+  display: flex;
+  align-items: flex-start;
+  border: 1px solid #ccc;
+  margin: 10px 0;
+  padding: 10px;
+  text-align: left;
+}
+
+.todo-content {
+  flex: 1;
+}
+
+/* Remove these priority-related classes */
+.priority-1,
+.priority-2,
+.priority-3 {
+  display: none;
+}
+
+.todo-item.completed {
+  opacity: 0.7;
+}
+
+.todo-item h3 {
+  margin: 0;
+}
+
+button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}

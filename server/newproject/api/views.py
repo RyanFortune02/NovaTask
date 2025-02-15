@@ -78,7 +78,7 @@ def check_notifications(request):
 
     pending_notifications = Todo.objects.filter(
         delivered=False,
-        notify_time=poll_max_time,
+        notify_time__lte=poll_max_time,
     )
 
     serializer = TodoSerializer(

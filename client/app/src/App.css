@@ -110,3 +110,31 @@ button {
   padding: 5px 10px;
   cursor: pointer;
 }
+
+/* Add these styles for the calendar */
+.fc { /* the calendar root */
+    max-width: 1100px;
+    margin: 0 auto;
+    margin-bottom: 2em;
+}
+
+.fc-toolbar-title {
+    font-size: 1.5em !important;
+}
+
+.fc-event {
+    cursor: pointer;
+}
+
+.fc-day-today {
+    background: rgba(100, 108, 255, 0.1) !important;
+}
+
+.fc button {
+    background-color: #646cff;
+    margin: 0 2px;
+}
+
+.fc button:hover {
+    background-color: #535bf2;
+}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"; // State is a way for us to hold data that will manually trigger
 // a re-render of the component when it changes
+import Calendar from "./components/Calendar";
 import "./App.css";
 
 function App() {
@@ -107,9 +108,25 @@ function App() {
     }
   };
 
+  // Add this new function to format todos for the calendar
+  const formatTodosForCalendar = () => {
+    return todos.map(todo => ({
+      id: todo.id.toString(),
+      title: todo.title,
+      start: `${todo.due_date}${todo.start_time ? 'T' + todo.start_time : ''}`,
+      end: todo.end_time ? `${todo.due_date}T${todo.end_time}` : undefined,
+      backgroundColor: todo.completed ? 'green' : undefined,
+      borderColor: todo.completed ? 'green' : undefined,
+    }));
+  };
+
   return (
     <>
       <h1>Todo List</h1>
+      
+      {/* Add Calendar component here, above the form */}
+      <Calendar events={formatTodosForCalendar()} />
+
       <div className="todo-form">
         <input
           type="text"

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"; // State is a way for us to hold data that will manually trigger
 // a re-render of the component when it changes
-import Calendar from "./components/Calendar";
+import Calendar from "./components/Calendar"; // Import the Calendar component 
 import "./App.css";
 
 function App() {
@@ -108,13 +108,26 @@ function App() {
     }
   };
 
-  // Add this new function to format todos for the calendar
+  /*
+    formatTodosForCalendar function logic:
+    1. Maps over the todos array to format each todo for FullCalendar
+    2. Converts the todo ID to a string for compatibility with FullCalendar
+    3. Sets the title for the calendar event
+    4. Combines the due date and start time into a single string for the start property
+    5. Sets the end time if available
+    6. Sets the background and border color to green if the todo is completed
+    7. Returns the formatted array of todos
+  */
+  // Converts todo items into FullCalendar compatible event format
   const formatTodosForCalendar = () => {
     return todos.map(todo => ({
-      id: todo.id.toString(),
-      title: todo.title,
+      id: todo.id.toString(),                    // Convert ID to string for FullCalendar
+      title: todo.title,                         // Event title to display
+      // Combine date and time, using 'T' as ISO-8601 separator
       start: `${todo.due_date}${todo.start_time ? 'T' + todo.start_time : ''}`,
+      // Add end time if available
       end: todo.end_time ? `${todo.due_date}T${todo.end_time}` : undefined,
+      // Use green color for completed todos
       backgroundColor: todo.completed ? 'green' : undefined,
       borderColor: todo.completed ? 'green' : undefined,
     }));
@@ -122,11 +135,12 @@ function App() {
 
   return (
     <>
-      <h1>Todo List</h1>
+      <h1>NovaTask</h1>
       
-      {/* Add Calendar component here, above the form */}
+      {/* Calendar component for creating events that receives and displays the formatted todo events */}
       <Calendar events={formatTodosForCalendar()} />
 
+      {/* Form for adding new todos */}
       <div className="todo-form">
         <input
           type="text"

@@ -111,11 +111,12 @@ button {
   cursor: pointer;
 }
 
-/* Add these styles for the calendar */
+/* Calendar's Style */
 .fc { /* the calendar root */
-    max-width: 1100px;
+    max-width: 1100px; /* Adjust width of the Calenda */
     margin: 0 auto;
     margin-bottom: 2em;
+    padding: 0 1rem; /* Add padding on the sides */
 }
 
 .fc-toolbar-title {

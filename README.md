@@ -64,3 +64,6 @@ NovaTask is a full-stack application using a Django backend and a React frontend
 - https://www.codeguage.com/courses/html/forms-input-types (for different form types)
 - https://stackoverflow.com/questions/46539480/react-clearing-an-input-value-after-form-submit (for clearing fields)
 - https://gist.github.com/mandiwise/d6c9cb0a6e9edc20e24b6cd973cdb6d7 (css styles)
+
+- https://fullcalendar.io/docs/event-object - Full Calendar Documentation
+- https://www.youtube.com/watch?v=HpfzprSnhUw&t=629s - Django & React FullCalendar Tutorial #1: Overview and Basic Setup of FullCalendar

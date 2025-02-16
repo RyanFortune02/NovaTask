@@ -67,5 +67,9 @@ class Todo(models.Model):
     # REPEAT_DAYS_SAT = 0b0000001
     repeat_days = models.PositiveSmallIntegerField(default=0b0000000)
 
+    # Repeat date interval.
+    repeat_start_time = models.DateTimeField(null=True, blank=True)
+    repeat_end_time = models.DateTimeField(null=True, blank=True)
+
     def __str__(self):
         return self.title

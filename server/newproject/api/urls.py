@@ -1,7 +1,8 @@
 from django.urls import path
-from . import views
+from .views import todos, todo_detail, check_notifications
 
 urlpatterns = [
-    path('todos/', views.todos),
-    path('todos/<int:pk>/', views.todo_detail),
+    path("todos/", todos),
+    path("todos/<int:pk>/", todo_detail),
+    path("todos/notify/", check_notifications),
 ]

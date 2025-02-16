@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"; // State is a way for us to hold data that will manually trigger
 // a re-render of the component when it changes
-import Calendar from "./components/Calendar"; // Import the Calendar component 
+import Calendar from "./components/Calendar"; // Import the Calendar component
 import "./App.css";
 
 function App() {
@@ -118,25 +118,43 @@ function App() {
     6. Sets the background and border color to green if the todo is completed
     7. Returns the formatted array of todos
   */
-  // Converts todo items into FullCalendar compatible event format
+  // Helper function to convert the repeat_days bitmask into an array of day indices.
+  // If bitmask is 0 or falsy, assume the event repeats every day.
+  function getRepeatDaysArray(bitmask) {
+    if (!bitmask) return [0, 1, 2, 3, 4, 5, 6];
+    const days = [];
+    if (bitmask & 0b1000000) days.push(0); //Sunday
+    if (bitmask & 0b0100000) days.push(1); //Monday
+    if (bitmask & 0b0010000) days.push(2); //Tuesday
+    if (bitmask & 0b0001000) days.push(3); //Wednesday
+    if (bitmask & 0b0000100) days.push(4); //Thursday
+    if (bitmask & 0b0000010) days.push(5); //Friday
+    if (bitmask & 0b0000001) days.push(6); //Saturday
+    return days;
+  }
+
+  // Converts todo items into FullCalendar compatible event format,
+  // and includes a new property `repeatDays` based on the todo's `repeat_days` bitmask.
   const formatTodosForCalendar = () => {
-    return todos.map(todo => ({
-      id: todo.id.toString(),                    // Convert ID to string for FullCalendar
-      title: todo.title,                         // Event title to display
+    return todos.map((todo) => ({
+      id: todo.id.toString(), // Convert ID to string for FullCalendar
+      title: todo.title, // Event title to display
       // Combine date and time, using 'T' as ISO-8601 separator
-      start: `${todo.due_date}${todo.start_time ? 'T' + todo.start_time : ''}`,
+      start: `${todo.due_date}${todo.start_time ? "T" + todo.start_time : ""}`,
       // Add end time if available
       end: todo.end_time ? `${todo.due_date}T${todo.end_time}` : undefined,
       // Use green color for completed todos
-      backgroundColor: todo.completed ? 'green' : undefined,
-      borderColor: todo.completed ? 'green' : undefined,
+      backgroundColor: todo.completed ? "green" : undefined,
+      borderColor: todo.completed ? "green" : undefined,
+      // New property: convert repeat_days bitmask into an array of day indices.
+      repeatDays: getRepeatDaysArray(todo.repeat_days),
     }));
   };
 
   return (
     <>
       <h1>NovaTask</h1>
-      
+
       {/* Calendar component for creating events that receives and displays the formatted todo events */}
       <Calendar events={formatTodosForCalendar()} />
 

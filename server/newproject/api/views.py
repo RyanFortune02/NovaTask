@@ -1,27 +1,35 @@
+from datetime import timedelta
+from django.utils import timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Todo
 from .serializer import TodoSerializer
 
+
 # Api view decorator @api_view defines the allowed HTTP methods
-@api_view(['GET', 'POST'])
+@api_view(["GET", "POST"])
 def todos(request):
-    if request.method == 'GET':
+    if request.method == "GET":
         # GET request is for retrieving data
         todos = Todo.objects.all()  # Get all todos from database
         serializer = TodoSerializer(todos, many=True)  # Convert todos to JSON format
-        return Response(serializer.data)
-    
-    elif request.method == 'POST':
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    elif request.method == "POST":
         # POST request is for creating data
         serializer = TodoSerializer(data=request.data)  # Convert JSON to Todo format
         if serializer.is_valid():
             serializer.save()  # Save the data to database if valid
-            return Response(serializer.data, status=status.HTTP_201_CREATED)  # Return 201 status for successful creation
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # Return errors if data is invalid
+            return Response(
+                serializer.data, status=status.HTTP_201_CREATED
+            )  # Return 201 status for successful creation
+        return Response(
+            serializer.errors, status=status.HTTP_400_BAD_REQUEST
+        )  # Return errors if data is invalid
 
-@api_view(['GET', 'PUT', 'DELETE'])
+
+@api_view(["GET", "PUT", "DELETE"])
 def todo_detail(request, pk):
     """
     Function handles individual todo operations:
@@ -30,21 +38,56 @@ def todo_detail(request, pk):
     DELETE: Remove a specific todo
     """
     try:
-        todo = Todo.objects.get(id=pk)  # Attempt to retrieve the todo by its primary key
+        todo = Todo.objects.get(
+            id=pk
+        )  # Attempt to retrieve the todo by its primary key
     except Todo.DoesNotExist:
-        return Response({'error': 'Todo not found'}, status=status.HTTP_404_NOT_FOUND)  # Return 404 if todo doesn't exist
+        return Response(
+            {"error": "Todo not found"}, status=status.HTTP_404_NOT_FOUND
+        )  # Return 404 if todo doesn't exist
 
-    if request.method == 'GET':
+    if request.method == "GET":
         serializer = TodoSerializer(todo)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    elif request.method == 'PUT':
-        serializer = TodoSerializer(todo, data=request.data)  # Combine existing todo with updated data
+    elif request.method == "PUT":
+        serializer = TodoSerializer(
+            todo, data=request.data
+        )  # Combine existing todo with updated data
         if serializer.is_valid():
             serializer.save()  # Save the updated data if validation is successful
-            return Response(serializer.data)  # Return the updated todo data
+            return Response(
+                serializer.data, status=status.HTTP_200_OK
+            )  # Return the updated todo data
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
+    elif request.method == "DELETE":
         todo.delete()  # Remove the todo from the database
-        return Response(status=status.HTTP_204_NO_CONTENT)  # Return 204 status to indicate successful deletion
+        return Response(
+            status=status.HTTP_204_NO_CONTENT
+        )  # Return 204 status to indicate successful deletion
+
+
+@api_view(["GET"])
+def check_notifications(request):
+    if request.method != "GET":
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    # Check for notifications due within next minute
+    poll_max_time = timezone.now() + timedelta(minutes=1)
+
+    pending_notifications = Todo.objects.filter(
+        delivered=False,
+        notify_time__lte=poll_max_time,
+    )
+
+    serializer = TodoSerializer(
+        pending_notifications, many=True
+    )  # Convert todos to JSON format
+
+    for todo in pending_notifications:
+        # Send notification logic here
+        todo.delivered = True
+        todo.save()
+
+    return Response(serializer.data, status=status.HTTP_200_OK)

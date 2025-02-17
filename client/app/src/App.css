@@ -139,3 +139,96 @@ button {
 .fc button:hover {
     background-color: #535bf2;
 }
+
+/* Style dropdown menu to select Todo Type */
+.todo-form select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.repeat-select, .frequency-select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.frequency-label {
+  margin-left: 0.5rem;
+  color: #666;
+}
+
+/* Form styles for inline labels */
+.form-row {
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Center items vertically */
+  gap: 1rem; /* Space between label and input */
+  margin-bottom: 0.5rem;
+}
+
+.form-row label {
+  min-width: 100px; /* Fixed width for labels */
+  text-align: right; 
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Style for notification time input */
+.form-row input[type="time"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: auto;
+}
+
+/* Styles for the day selector buttons */
+.days-selector {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.day-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: #333;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.day-button.selected {
+  background-color: #646cff;
+  color: white;
+  border-color: #535bf2;
+}
+
+.day-button:hover {
+  background-color: #f0f0f0;
+}
+
+.day-button.selected:hover {
+  background-color: #535bf2;
+}
+
+.repeat-end-date {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #333;
+  background-color: white;
+}
+

@@ -67,3 +67,8 @@ NovaTask is a full-stack application using a Django backend and a React frontend
 
 - https://fullcalendar.io/docs/event-object - Full Calendar Documentation
 - https://www.youtube.com/watch?v=HpfzprSnhUw&t=629s - Django & React FullCalendar Tutorial #1: Overview and Basic Setup of FullCalendar
+
+
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select - The HTML Select element
+- https://www.geeksforgeeks.org/bit-manipulation-in-javascript/ -Bit manipulation in JavaScript
+

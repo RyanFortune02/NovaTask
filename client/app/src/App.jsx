@@ -212,22 +212,88 @@ function App() {
     return days;
   }
 
+
   // Converts todo items into FullCalendar compatible event format,
   // and includes a new property `repeatDays` based on the todo's `repeat_days` bitmask.
   const formatTodosForCalendar = () => {
-    return todos.map((todo) => ({
-      id: todo.id.toString(), // Convert ID to string for FullCalendar
-      title: todo.title, // Event title to display
-      // Combine date and time into a single string for start property
-      start: `${todo.due_date}${todo.start_time ? "T" + todo.start_time : ""}`,
-      // Add end time if available
-      end: todo.end_time ? `${todo.due_date}T${todo.end_time}` : undefined,
-      // Use green color for completed todos
-      backgroundColor: todo.completed ? "green" : undefined,
-      borderColor: todo.completed ? "green" : undefined,
-      // New property: convert repeat_days bitmask into an array of day indices.
-      repeatDays: getRepeatDaysArray(todo.repeat_days),
-    }));
+    return todos.map((todo) => {
+      // Create a base event object with common properties
+      const baseEvent = {
+        id: todo.id.toString(), // Convert ID to string for FullCalendar
+        title: todo.title, // Event title to display
+        // Use green color for completed todos
+        backgroundColor: todo.completed ? "green" : undefined,
+        borderColor: todo.completed ? "green" : undefined,
+      };
+
+      // If this is not a recurring event, return simple event format
+      if (todo.repeat_type === 'N') {
+        return {
+          // For non-recurring events, use the base event object
+          ...baseEvent,
+          // Set the start date and time
+          // Combine date and time into a single string for start property
+          start: `${todo.due_date}${todo.start_time ? "T" + todo.start_time : ""}`,
+          end: todo.end_time ? `${todo.due_date}T${todo.end_time}` : undefined,  // Add end time if available
+
+        };
+      }
+
+      // For recurring events, create RRule format
+      // Map the repeat_type to FullCalendar's RRule frequency
+      const rruleFreq = {
+        'W': 'WEEKLY',
+        'M': 'MONTHLY',
+        'Y': 'YEARLY'
+      }[todo.repeat_type];
+
+      // convert repeat_days bitmask into an array of day indices.
+      // If bitmask is 0 or falsy, assume the event repeats every day.
+      const byWeekDay = getRepeatDaysArray(todo.repeat_days).map(day => {
+        return ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'][day];
+      });
+
+      return {
+
+        ...baseEvent,
+        rrule: {
+          freq: rruleFreq, // Frequency of the event (weekly, monthly, yearly)
+          interval: todo.repeat_frequency, // Interval for the frequency (e.g., every 2 weeks)
+          byweekday: byWeekDay, // Days of the week on which the event occurs
+          dtstart: `${todo.due_date}${todo.start_time ? "T" + todo.start_time : ""}`, // Start date and time of the event
+          until: todo.repeat_end_time, // End date and time of the event
+        },
+        duration: todo.end_time && todo.start_time ? {
+          hours: getHoursDifference(todo.start_time, todo.end_time)
+        } : undefined
+      };
+    });
+  };
+
+  // Function to calculate how long the event lasts in hours
+  const getHoursDifference = (startTime, endTime) => {
+    const [startHour, startMinute] = startTime.split(':').map(Number);
+    const [endHour, endMinute] = endTime.split(':').map(Number);
+    return (endHour - startHour) + (endMinute - startMinute) / 60;
+  };
+
+  // FormatDuation function logic:
+  // 1. Takes start and end time as parameters
+  // 2. If either time is not provided, return null
+  // 3. Calculate the total hours difference using getHoursDifference function
+  // 4. Calculate hours and minutes from the total hours
+  // 5. Return formatted string based on hours and minutes
+  const formatDuration = (startTime, endTime) => {
+    if (!startTime || !endTime) return null;
+    
+    const totalHours = getHoursDifference(startTime, endTime); // Calls the helper function to get the difference in hour
+    const hours = Math.floor(totalHours);   // Math.floor() rounds down to the nearest whole number
+    const minutes = Math.round((totalHours - hours) * 60); // Math.round() rounds to the nearest whole number
+    
+    // Format the duration string based on hours and minutes
+    if (hours === 0) return `${minutes} minutes`;
+    if (minutes === 0) return `${hours} hour${hours !== 1 ? 's' : ''}`;
+    return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
   };
 
   return (
@@ -377,6 +443,9 @@ function App() {
           <p>Date: {new Date(todo.due_date).toLocaleDateString()}</p>
           <p>
             Time: {todo.start_time} - {todo.end_time}
+            {todo.start_time && todo.end_time && (
+              <span> ({formatDuration(todo.start_time, todo.end_time)})</span> // Format TODO/Class duration
+            )}
           </p>
           <p>
             Notification: {todo.notify_time ?new Date(todo.notify_time).toLocaleTimeString() : 'No notification'}

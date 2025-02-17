@@ -4,6 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";     // Month-day grid views
 import timeGridPlugin from "@fullcalendar/timegrid";   // Week-day time grid views
 import interactionPlugin from "@fullcalendar/interaction"; // Enables event interaction
 import listPlugin from "@fullcalendar/list";           // List view
+import rrulePlugin from '@fullcalendar/rrule';  // Import RRule plugin
 
 // The Calendar component to display events by month, week, day, list.
 // @param {Array} events - Array of event objects to display on calendar
@@ -12,7 +13,7 @@ function Calendar({ events = [] }) {
         <div>
             <FullCalendar
                 // Adds required plugins
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, rrulePlugin]} 
                 
                 // Set default view to month grid
                 initialView="dayGridMonth"

@@ -10,14 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fullcalendar/core": "~6.1.15",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/list": "^6.1.15",
     "@fullcalendar/react": "^6.1.15",
+    "@fullcalendar/rrule": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "rrule": "^2.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

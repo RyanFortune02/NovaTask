@@ -31,7 +31,8 @@ NovaTask is a full-stack application using a Django backend and a React frontend
      ```
    - Install FullCalendar packages (if not already included in package.json):
      ```bash
-     yarn add @fullcalendar/react @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction @fullcalendar/list
+     cd client/app 
+     yarn add @fullcalendar/react @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction @fullcalendar/list @fullcalendar/rrule rrule
      ```
    - Start the client dev server:
      ```bash
@@ -67,3 +68,10 @@ NovaTask is a full-stack application using a Django backend and a React frontend
 
 - https://fullcalendar.io/docs/event-object - Full Calendar Documentation
 - https://www.youtube.com/watch?v=HpfzprSnhUw&t=629s - Django & React FullCalendar Tutorial #1: Overview and Basic Setup of FullCalendar
+- https://fullcalendar.io/docs/rrule-plugin - Rrule Plugin to display recurring events in the Full Calendar
+
+- https://plainenglish.io/blog/react-open-link-in-new-tab# - How to Open a Link in a New Tab in React
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/floor -For calculations to handle duration more accurately.
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select - The HTML Select element
+- https://www.geeksforgeeks.org/bit-manipulation-in-javascript/ -Bit manipulation in JavaScript
+

@@ -1,3 +1,8 @@
+body {
+  background-color: #1a1a1a; /* Dark background */
+  color: #ffffff; /* Light text color */
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -47,11 +52,20 @@
   padding: 2rem;
 }
 
+.form-container {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 800px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .todo-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .todo-form input,
@@ -59,9 +73,14 @@
 .todo-form select {
   padding: 0.5rem;
   font-size: 1rem;
+  background-color: #3a3a3a;
+  color: #ffffff;
+  border: 1px solid #555;
+  border-radius: 4px;
 }
 
-.todo-form button {
+/* Change the generic button style to be more specific */
+.todo-form button:not(.day-button) {
   padding: 0.5rem;
   background-color: #4caf50;
   color: white;
@@ -78,10 +97,11 @@
 .todo-item {
   display: flex;
   align-items: flex-start;
-  border: 1px solid #ccc;
+  border: 1px solid #444;
   margin: 10px 0;
   padding: 10px;
   text-align: left;
+  background-color: #2a2a2a;
 }
 
 .todo-content {
@@ -140,6 +160,24 @@ button {
     background-color: #535bf2;
 }
 
+/* External link button styles */
+.external-button {
+  background-color: blue; /* Use !important to ensure override */
+  color: white !important;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 2rem; /* Add space between button and calendar */
+  transition: background-color 0.3s ease;
+  display: inline-block; /* Ensure proper button spacing */
+}
+
+.external-button:hover {
+  background-color: #535bf2 !important;
+}
+
 /* Style dropdown menu to select Todo Type */
 .todo-form select {
   padding: 0.5rem;
@@ -147,7 +185,7 @@ button {
   margin-bottom: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: white;
+  background-color: blue; 
 }
 
 .repeat-select, .frequency-select {
@@ -160,7 +198,7 @@ button {
 
 .frequency-label {
   margin-left: 0.5rem;
-  color: #666;
+  color: #ffffff;
 }
 
 /* Form styles for inline labels */
@@ -175,7 +213,7 @@ button {
   min-width: 100px; /* Fixed width for labels */
   text-align: right; 
   font-size: 1rem;
-  color: #333;
+  color: #ffffff;
 }
 
 /* Style for notification time input */
@@ -197,9 +235,9 @@ button {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid #ccc;
-  background-color: white;
-  color: #333;
+  border: 1px solid #555;
+  background-color: #3a3a3a; /* Change to dark gray for unselected state */
+  color: #ffffff;
   font-size: 0.9rem;
   cursor: pointer;
   padding: 0;
@@ -210,17 +248,18 @@ button {
 }
 
 .day-button.selected {
-  background-color: #646cff;
+  background-color: #4caf50; /* Change to green when selected */
   color: white;
-  border-color: #535bf2;
+  border-color: #45a049;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
 }
 
 .day-button:hover {
-  background-color: #f0f0f0;
+  background-color: #45a049; /* Darker green on hover when not selected */
 }
 
 .day-button.selected:hover {
-  background-color: #535bf2;
+  background-color: #45a049; /* Darker green on hover when selected */
 }
 
 .repeat-end-date {

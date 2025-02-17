@@ -3,6 +3,21 @@ import { useEffect, useState } from "react"; // State is a way for us to hold da
 import Calendar from "./components/Calendar"; // Import the Calendar component
 import "./App.css";
 
+// External link button component
+// This component is used to create a button that opens an external link in a new tab
+// It takes a URL and children (text or elements to display inside the button)
+const ExternalButtonLink = ({ url, children }) => {
+  return (
+    <button 
+      className="external-button"
+      onClick={() => window.open(url, '_blank')}
+      type="button" // Add type to avoid form submission
+    >
+      {children}
+    </button>
+  );
+};
+
 function App() {
   useEffect(() => {
     // useEffect is a hook that allows us to run side effects in functional components
@@ -29,7 +44,6 @@ function App() {
   const TODO_TYPES = {
     TODO: "TODO", // Regular todo item
     CLASS: "CLASS",   // Class schedule item
-    EVENT: "EVENT",   // Event item
   };
 
   // Constants for repeat types that match backend model
@@ -220,134 +234,139 @@ function App() {
     <>
       <h1>NovaTask</h1>
 
+      <ExternalButtonLink url="https://novoconnect.ncf.edu">
+        NovoConnect
+      </ExternalButtonLink>
+
       {/* Calendar component for creating events that receives and displays the formatted todo events */}
       <Calendar events={formatTodosForCalendar()} />
 
       {/* Form for adding new todos */}
-      <div className="todo-form">
-        {/* Dropdown menu to select ToDo type */}
-        <select 
-          value={todoType}
-          onChange={(e) => setTodoType(e.target.value)}
-        >
-          <option value={TODO_TYPES.TODO}>Todo</option>
-          <option value={TODO_TYPES.CLASS}>Class</option>
-          <option value={TODO_TYPES.EVENT}>Event</option>
-        </select>
-
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <textarea
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <div className="form-row">
-          <label>Date:</label>
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-          />
-        </div>
-        <div className="form-row">
-          <label>Start Time:</label>
-          <input
-            type="time"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-          />
-        </div>
-        <div className="form-row">
-          <label>End Time:</label>
-          <input
-            type="time"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-          />
-        </div>
-        <div className="form-row">
-          <label>Repeat:</label>
+      <div className="form-container">
+        <div className="todo-form">
+          {/* Dropdown menu to select ToDo type */}
           <select 
-            value={repeatType}
-            onChange={(e) => setRepeatType(e.target.value)}
-            className="repeat-select"
+            value={todoType}
+            onChange={(e) => setTodoType(e.target.value)}
           >
-            <option value={REPEAT_TYPES.NEVER}>Don't repeat</option>
-            <option value={REPEAT_TYPES.WEEKS}>Weekly</option>
-            <option value={REPEAT_TYPES.MONTHS}>Monthly</option>
-            <option value={REPEAT_TYPES.YEARS}>Yearly</option>
+            <option value={TODO_TYPES.TODO}>Todo</option>
+            <option value={TODO_TYPES.CLASS}>Class</option>
           </select>
-        </div>
 
-        {repeatType !== REPEAT_TYPES.NEVER && (
-          <>
-            <div className="form-row">
-              <label>Every:</label>
-              <select
-                value={repeatFrequency}
-                onChange={(e) => setRepeatFrequency(Number(e.target.value))}
-                className="frequency-select"
-              >
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
-                  <option key={num} value={num}>{num}</option>
-                ))}
-              </select>
-              <span className="frequency-label">
-                {repeatType === REPEAT_TYPES.WEEKS ? 'weeks' :
-                repeatType === REPEAT_TYPES.MONTHS ? 'months' :
-                repeatType === REPEAT_TYPES.YEARS ? 'years' : ''}
-              </span>
-            </div>
-            <div className="form-row">
-              <label>Repeat on:</label>
-              <div className="days-selector">
-                {[
-                  { name: 'S', mask: REPEAT_DAYS.SUNDAY },
-                  { name: 'M', mask: REPEAT_DAYS.MONDAY },
-                  { name: 'T', mask: REPEAT_DAYS.TUESDAY },
-                  { name: 'W', mask: REPEAT_DAYS.WEDNESDAY },
-                  { name: 'T', mask: REPEAT_DAYS.THURSDAY },
-                  { name: 'F', mask: REPEAT_DAYS.FRIDAY },
-                  { name: 'S', mask: REPEAT_DAYS.SATURDAY },
-                ].map(day => (
-                  <button
-                    key={day.mask}
-                    type="button"
-                    className={`day-button ${repeatDays & day.mask ? 'selected' : ''}`}
-                    onClick={() => toggleDay(day.mask)}
-                  >
-                    {day.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="form-row">
-              <label>Until:</label>
-              <input
-                type="date"
-                value={repeatEndDate}
-                onChange={(e) => setRepeatEndDate(e.target.value)}
-                min={dueDate} // Ensure repeat end date is not before the due date
-                className="repeat-end-date"
-              />
-            </div>
-          </>
-        )}
-        <div className="form-row">
-          <label>Notify at:</label>
           <input
-            type="time"
-            value={notifyTime}
-            onChange={(e) => setNotifyTime(e.target.value)}
-            placeholder="Select notification time"
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
+          <textarea
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <div className="form-row">
+            <label>Date:</label>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+            />
+          </div>
+          <div className="form-row">
+            <label>Start Time:</label>
+            <input
+              type="time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+            />
+          </div>
+          <div className="form-row">
+            <label>End Time:</label>
+            <input
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+            />
+          </div>
+          <div className="form-row">
+            <label>Repeat:</label>
+            <select 
+              value={repeatType}
+              onChange={(e) => setRepeatType(e.target.value)}
+              className="repeat-select"
+            >
+              <option value={REPEAT_TYPES.NEVER}>Don't repeat</option>
+              <option value={REPEAT_TYPES.WEEKS}>Weekly</option>
+              <option value={REPEAT_TYPES.MONTHS}>Monthly</option>
+              <option value={REPEAT_TYPES.YEARS}>Yearly</option>
+            </select>
+          </div>
+
+          {repeatType !== REPEAT_TYPES.NEVER && (
+            <>
+              <div className="form-row">
+                <label>Every:</label>
+                <select
+                  value={repeatFrequency}
+                  onChange={(e) => setRepeatFrequency(Number(e.target.value))}
+                  className="frequency-select"
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                    <option key={num} value={num}>{num}</option>
+                  ))}
+                </select>
+                <span className="frequency-label">
+                  {repeatType === REPEAT_TYPES.WEEKS ? 'weeks' : 
+                  repeatType === REPEAT_TYPES.MONTHS ? 'months' :
+                  repeatType === REPEAT_TYPES.YEARS ? 'years' : ''}
+                </span>
+              </div>
+              <div className="form-row">
+                <label>Repeat on:</label>
+                <div className="days-selector">
+                  {[
+                    { name: 'S', mask: REPEAT_DAYS.SUNDAY },
+                    { name: 'M', mask: REPEAT_DAYS.MONDAY },
+                    { name: 'T', mask: REPEAT_DAYS.TUESDAY },
+                    { name: 'W', mask: REPEAT_DAYS.WEDNESDAY },
+                    { name: 'T', mask: REPEAT_DAYS.THURSDAY },
+                    { name: 'F', mask: REPEAT_DAYS.FRIDAY },
+                    { name: 'S', mask: REPEAT_DAYS.SATURDAY },
+                  ].map(day => (
+                    <button
+                      key={day.mask}
+                      type="button"
+                      className={`day-button ${repeatDays & day.mask ? 'selected' : ''}`}
+                      onClick={() => toggleDay(day.mask)}
+                    >
+                      {day.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="form-row">
+                <label>Until:</label>
+                <input
+                  type="date"
+                  value={repeatEndDate}
+                  onChange={(e) => setRepeatEndDate(e.target.value)}
+                  min={dueDate} // Ensure repeat end date is not before the due date
+                  className="repeat-end-date"
+                />
+              </div>
+            </>
+          )}
+          <div className="form-row">
+            <label>Notify at:</label>
+            <input
+              type="time"
+              value={notifyTime}
+              onChange={(e) => setNotifyTime(e.target.value)}
+              placeholder="Select notification time"
+            />
+          </div>
+          <button onClick={addTodo}>Add Todo</button>
         </div>
-        <button onClick={addTodo}>Add Todo</button>
       </div>
 
       {todos.map((todo) => (

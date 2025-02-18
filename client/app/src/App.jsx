@@ -281,16 +281,21 @@ function App() {
         return ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'][day];
       });
 
+      let ruleObject = {
+        freq: rruleFreq, // Frequency of the event (weekly, monthly, yearly)
+        interval: todo.repeat_frequency, // Interval for the frequency (e.g., every 2 weeks)
+        dtstart: `${todo.due_date}${todo.start_time ? "T" + todo.start_time : ""}`, // Start date and time of the event
+        until: todo.repeat_end_time, // End date and time of the event
+      }
+
+      if (todo.repeatFrequency == REPEAT_TYPES.WEEKS) {
+        ruleObject.byweekday = byWeekDay; // Days of the week on which the event occurs
+      }
+      
       return {
 
         ...baseEvent,
-        rrule: {
-          freq: rruleFreq, // Frequency of the event (weekly, monthly, yearly)
-          interval: todo.repeat_frequency, // Interval for the frequency (e.g., every 2 weeks)
-          byweekday: byWeekDay, // Days of the week on which the event occurs
-          dtstart: `${todo.due_date}${todo.start_time ? "T" + todo.start_time : ""}`, // Start date and time of the event
-          until: todo.repeat_end_time, // End date and time of the event
-        },
+        rrule: ruleObject,
         duration: todo.end_time && todo.start_time ? {
           hours: getHoursDifference(todo.start_time, todo.end_time)
         } : undefined

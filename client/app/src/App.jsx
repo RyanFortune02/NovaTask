@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"; // State is a way for us to hold da
 import Calendar from "./components/Calendar"; // Import the Calendar component
 import "./App.css";
 
+
 // External link button component
 // This component is used to create a button that opens an external link in a new tab
 // It takes a URL and children (text or elements to display inside the button)
@@ -18,6 +19,32 @@ const ExternalButtonLink = ({ url, children }) => {
   );
 };
 
+  // Function to calculate how long the event lasts in hours
+  const getHoursDifference = (startTime, endTime) => {
+    const [startHour, startMinute] = startTime.split(':').map(Number);
+    const [endHour, endMinute] = endTime.split(':').map(Number);
+    return (endHour - startHour) + (endMinute - startMinute) / 60;
+  };
+
+  // FormatDuation function logic:
+  // 1. Takes start and end time as parameters
+  // 2. If either time is not provided, return null
+  // 3. Calculate the total hours difference using getHoursDifference function
+  // 4. Calculate hours and minutes from the total hours
+  // 5. Return formatted string based on hours and minutes
+  const formatDuration = (startTime, endTime) => {
+    if (!startTime || !endTime) return null;
+    
+    const totalHours = getHoursDifference(startTime, endTime); // Calls the helper function to get the difference in hour
+    const hours = Math.floor(totalHours);   // Math.floor() rounds down to the nearest whole number
+    const minutes = Math.round((totalHours - hours) * 60); // Math.round() rounds to the nearest whole number
+    
+    // Format the duration string based on hours and minutes
+    if (hours === 0) return `${minutes} minutes`;
+    if (minutes === 0) return `${hours} hour${hours !== 1 ? 's' : ''}`;
+    return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+  };
+  
 function App() {
   useEffect(() => {
     // useEffect is a hook that allows us to run side effects in functional components
@@ -39,6 +66,7 @@ function App() {
   const [notifyTime, setNotifyTime] = useState(""); // For notification time
   const [repeatDays, setRepeatDays] = useState(0); // Bitmask for selected days
   const [repeatEndDate, setRepeatEndDate] = useState(""); // Stop date for repeat events
+  const [showForm, setShowForm] = useState(false); // State to control the visibility of the form
 
   // Constants for todo types that match backend model
   const TODO_TYPES = {
@@ -270,30 +298,10 @@ function App() {
     });
   };
 
-  // Function to calculate how long the event lasts in hours
-  const getHoursDifference = (startTime, endTime) => {
-    const [startHour, startMinute] = startTime.split(':').map(Number);
-    const [endHour, endMinute] = endTime.split(':').map(Number);
-    return (endHour - startHour) + (endMinute - startMinute) / 60;
-  };
 
-  // FormatDuation function logic:
-  // 1. Takes start and end time as parameters
-  // 2. If either time is not provided, return null
-  // 3. Calculate the total hours difference using getHoursDifference function
-  // 4. Calculate hours and minutes from the total hours
-  // 5. Return formatted string based on hours and minutes
-  const formatDuration = (startTime, endTime) => {
-    if (!startTime || !endTime) return null;
-    
-    const totalHours = getHoursDifference(startTime, endTime); // Calls the helper function to get the difference in hour
-    const hours = Math.floor(totalHours);   // Math.floor() rounds down to the nearest whole number
-    const minutes = Math.round((totalHours - hours) * 60); // Math.round() rounds to the nearest whole number
-    
-    // Format the duration string based on hours and minutes
-    if (hours === 0) return `${minutes} minutes`;
-    if (minutes === 0) return `${hours} hour${hours !== 1 ? 's' : ''}`;
-    return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+  // Add toggle function to show/hide the Todo form
+  const toggleForm = () => {
+    setShowForm(!showForm); 
   };
 
   return (
@@ -307,8 +315,15 @@ function App() {
       {/* Calendar component for creating events that receives and displays the formatted todo events */}
       <Calendar events={formatTodosForCalendar()} />
 
-      {/* Form for adding new todos */}
-      <div className="form-container">
+      {/* Button to toggle the visibility of the form */}
+      <button className="toggle-form-button" onClick={toggleForm}>
+        {showForm ? 'Hide Todo Form' : 'Add New Todo/Class'}
+      </button>
+
+      {/* Form container Modified  with conditional rendering to display TODO Form */}
+      {/* The form is only visible when showForm is true */}
+      <div className={`form-container ${showForm ? 'visible' : 'hidden'}`}>
+        {/* Form for adding new todos */}
         <div className="todo-form">
           {/* Dropdown menu to select ToDo type */}
           <select 

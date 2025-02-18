@@ -288,7 +288,7 @@ function App() {
         until: todo.repeat_end_time, // End date and time of the event
       }
 
-      if (todo.repeatFrequency == REPEAT_TYPES.WEEKS) {
+      if (todo.repeat_type == REPEAT_TYPES.WEEKS) {
         ruleObject.byweekday = byWeekDay; // Days of the week on which the event occurs
       }
       

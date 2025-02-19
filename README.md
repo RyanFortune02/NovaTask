@@ -31,7 +31,7 @@ NovaTask is a full-stack application using a Django backend and a React frontend
      ```
    - Install FullCalendar packages (if not already included in package.json):
      ```bash
-     cd client/app 
+     cd client/app
      yarn add @fullcalendar/react @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction @fullcalendar/list @fullcalendar/rrule rrule
      ```
    - Start the client dev server:
@@ -75,3 +75,9 @@ NovaTask is a full-stack application using a Django backend and a React frontend
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select - The HTML Select element
 - https://www.geeksforgeeks.org/bit-manipulation-in-javascript/ -Bit manipulation in JavaScript
 
+Resources for hosting:
+https://www.youtube.com/watch?v=XMGOfJxnH7s (Vite react to netlify)
+pythonanywhere backend hosting - Wes (TA)
+
+Link for frontend(may not be hosted at time of checking link):
+https://banyanplanner.netlify.app/

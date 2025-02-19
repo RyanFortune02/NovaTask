@@ -73,3 +73,15 @@ class Todo(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class TimeEntry(models.Model):
+    todo = models.ForeignKey(Todo, on_delete=models.CASCADE)
+    week_start_date = models.DateField()
+    minutes_spent = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return (
+            f"{self.todo.title} - {self.week_start_date} ({self.minutes_spent} minutes)"
+        )

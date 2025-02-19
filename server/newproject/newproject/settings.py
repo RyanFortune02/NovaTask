@@ -23,9 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-bx2r+e@7$=zp3+=34k4^)*e3$*16%^@noz%f7z=&ikc3i)#@7g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True #for deployment turn false
 
-ALLOWED_HOSTS = ["https://ryanfortune.pythonanywhere.com/","*"] #Where the backend is hosted
+ALLOWED_HOSTS = ["ryanfortune.pythonanywhere.com/","*", #Where the backend is hosted
+                 "banyanplanner.netlify.app"] #where the frontend is hosted
 
 
 # Application definition

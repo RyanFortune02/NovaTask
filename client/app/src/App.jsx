@@ -212,7 +212,7 @@ function App() {
 
   const deleteTodo = async (id) => {
     try {
-      await fetch(`https://localhost:8000/api/todos/${id}/`, {
+      await fetch(`https://ryanfortune.pythonanywhere.com/api/todos/${id}/`, {
         method: "DELETE", // DELETE is used to delete data on the server
       });
       setTodos((prev) => prev.filter((todo) => todo.id !== id)); // filtering out the todo with the id that we want to delete

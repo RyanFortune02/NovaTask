@@ -105,7 +105,7 @@ function App() {
     try {
       // make an api request to get all the todos
       const response = await fetch(
-        "http://ryanfortune.pythonanywhere.com/api/todos/"
+        "https://ryanfortune.pythonanywhere.com/api/todos/"
       ); // fetch is a built-in function that allows us to make network requests
       const data = await response.json(); // structuring the data in json format
       setTodos(data);
@@ -150,7 +150,7 @@ function App() {
     };
     try {
       const response = await fetch(
-        "http://ryanfortune.pythonanywhere.com/api/todos/",
+        "https://ryanfortune.pythonanywhere.com/api/todos/",
         {
           method: "POST", // POST is used to send data to the server
           headers: {
@@ -184,7 +184,7 @@ function App() {
   const toggleComplete = async (todo) => {
     try {
       const response = await fetch(
-        `http://ryanfortune.pythonanywhere.com/api/todos/${todo.id}/`,
+        `https://ryanfortune.pythonanywhere.com/api/todos/${todo.id}/`,
         {
           method: "PUT", // PUT is used to update data on the server
           headers: {
@@ -212,7 +212,7 @@ function App() {
 
   const deleteTodo = async (id) => {
     try {
-      await fetch(`http://ryanfortune.pythonanywhere.com/api/todos/${id}/`, {
+      await fetch(`https://localhost:8000/api/todos/${id}/`, {
         method: "DELETE", // DELETE is used to delete data on the server
       });
       setTodos((prev) => prev.filter((todo) => todo.id !== id)); // filtering out the todo with the id that we want to delete

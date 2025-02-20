@@ -2,15 +2,27 @@ import { useEffect, useState } from "react"; // State is a way for us to hold da
 // a re-render of the component when it changes
 import Calendar from "./components/Calendar"; // Import the Calendar component
 import "./App.css";
-import Popup  from "./components/Popup";
-import ClassTimeTracker from './components/ClassTimeTracker'; // Import the ClassTimeTracker component
+import Popup from "./components/Popup";
+import ClassTimeTracker from "./components/ClassTimeTracker"; // Import the ClassTimeTracker component
 
 // Array of motivational quotes
 const quotes = [
-  { text: "A little progress each day adds up to big results.", author: "- Satya Nani" },
-  { text: "The future depends on what you do today.", author: "- Mahatma Gandhi" },
-  { text: "Success is not the key to happiness. Happiness is the key to success.", author: "- Albert Schweitzer" },
-  { text: "It always seems impossible until it's done.", author: "- Nelson Mandela" },
+  {
+    text: "A little progress each day adds up to big results.",
+    author: "- Satya Nani",
+  },
+  {
+    text: "The future depends on what you do today.",
+    author: "- Mahatma Gandhi",
+  },
+  {
+    text: "Success is not the key to happiness. Happiness is the key to success.",
+    author: "- Albert Schweitzer",
+  },
+  {
+    text: "It always seems impossible until it's done.",
+    author: "- Nelson Mandela",
+  },
 ];
 
 // External link button component
@@ -60,7 +72,7 @@ function App() {
   useEffect(() => {
     // useEffect is a hook that allows us to run side effects in functional components
     checkNotifications(); // Check for notifications on initial load
-    
+
     const intervalId = setInterval(checkNotifications, 60000); // Polling Notifications every minute
     // Fetch initial todos
     fetchTodos();
@@ -85,8 +97,12 @@ function App() {
   const [showForm, setShowForm] = useState(false); // State to control the visibility of the form
   const [buttonPopup, setButtonPopup] = useState(false); // State to control the visibility of the popup
   const [timePopup, setTimePopup] = useState(false); // State to control the visibility of the time popup
-  const [quote, setQuote] = useState({text: "", author: ""}); // Store the current quote and author
-  const [notificationContent, setNotificationContent] = useState({title: "", message: "", time: ""}); // Store the notification content 
+  const [quote, setQuote] = useState({ text: "", author: "" }); // Store the current quote and author
+  const [notificationContent, setNotificationContent] = useState({
+    title: "",
+    message: "",
+    time: "",
+  }); // Store the notification content
 
   // Function to display a random quote
   const displayRandomQuote = () => {
@@ -131,7 +147,7 @@ function App() {
     try {
       // make an api request to get all the todos
       const response = await fetch(
-        "http://localhost:8000/api/todos/"
+        "https://ryanfortune.pythonanywhere.com/api/todos/"
       ); // fetch is a built-in function that allows us to make network requests
       const data = await response.json(); // structuring the data in json format
       setTodos(data);
@@ -149,9 +165,9 @@ function App() {
     // Create notification datetime by combining due date and notify time
     let notifyDateTime = null;
     if (dueDate && notifyTime) {
-        // Convert Notification time to local time
-        const localDate = new Date(`${dueDate}T${notifyTime}`);
-        notifyDateTime = localDate.toISOString(); // Convert time for backend
+      // Convert Notification time to local time
+      const localDate = new Date(`${dueDate}T${notifyTime}`);
+      notifyDateTime = localDate.toISOString(); // Convert time for backend
     }
 
     // If repeat end date is not provided, set it to null
@@ -178,7 +194,7 @@ function App() {
     };
     try {
       const response = await fetch(
-        "http://localhost:8000/api/todos/",
+        "https://ryanfortune.pythonanywhere.com/api/todos/",
         {
           method: "POST", // POST is used to send data to the server
           headers: {
@@ -216,7 +232,7 @@ function App() {
   const toggleComplete = async (todo) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/todos/${todo.id}/`,
+        `https://ryanfortune.pythonanywhere.com/api/todos/${todo.id}/`,
         {
           method: "PUT", // PUT is used to update data on the server
           headers: {
@@ -244,7 +260,7 @@ function App() {
 
   const deleteTodo = async (id) => {
     try {
-      await fetch(`http://localhost:8000/api/todos/${id}/`, {
+      await fetch(`https://ryanfortune.pythonanywhere.com/api/todos/${id}/`, {
         method: "DELETE", // DELETE is used to delete data on the server
       });
       setTodos((prev) => prev.filter((todo) => todo.id !== id)); // filtering out the todo with the id that we want to delete
@@ -253,32 +269,34 @@ function App() {
     }
   };
 
+  // Function to check for notifications every minute
+  const checkNotifications = async () => {
+    try {
+      const response = await fetch(
+        "https://ryanfortune.pythonanywhere.com/api/todos/notify/"
+      );
+      const data = await response.json();
 
-// Function to check for notifications every minute
-const checkNotifications = async () => {
-  try {
-    const response = await fetch('http://localhost:8000/api/todos/notify/');
-    const data = await response.json();
-    
-    if (data.length > 0) {
-      // Show notification popup for each pending notification
-      data.forEach(notification => {
-        // Display notification time in local format
-        const notifyTime = new Date(notification.notify_time).toLocaleTimeString();
-        setTimePopup(true);
-        // Update popup content
-        setNotificationContent({
-          title: `Notification for ${notification.title}`,
-          time: `Time : ${notifyTime}`,
-          message: notification.description,
+      if (data.length > 0) {
+        // Show notification popup for each pending notification
+        data.forEach((notification) => {
+          // Display notification time in local format
+          const notifyTime = new Date(
+            notification.notify_time
+          ).toLocaleTimeString();
+          setTimePopup(true);
+          // Update popup content
+          setNotificationContent({
+            title: `Notification for ${notification.title}`,
+            time: `Time : ${notifyTime}`,
+            message: notification.description,
+          });
         });
-      });
+      }
+    } catch (error) {
+      console.error("Error checking notifications:", error);
     }
-  } catch (error) {
-    console.error('Error checking notifications:', error);
-  }
-};
-
+  };
 
   /*
     formatTodosForCalendar function logic:
@@ -392,13 +410,11 @@ const checkNotifications = async () => {
         <p>{quote.author}</p>
       </Popup>
 
-
       <Popup trigger={timePopup} setTrigger={setTimePopup}>
-          <h3>{notificationContent.title}</h3>
-          <p>{notificationContent.time}</p>
-          <p>{notificationContent.message}</p>
-        </Popup>
-  
+        <h3>{notificationContent.title}</h3>
+        <p>{notificationContent.time}</p>
+        <p>{notificationContent.message}</p>
+      </Popup>
 
       {/*Class Time Tracker Component*/}
       <div className="time-tracking-section">

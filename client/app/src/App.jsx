@@ -2,6 +2,15 @@ import { useEffect, useState } from "react"; // State is a way for us to hold da
 // a re-render of the component when it changes
 import Calendar from "./components/Calendar"; // Import the Calendar component
 import "./App.css";
+import Popup  from "./components/Popup";
+
+// Array of motivational quotes
+const quotes = [
+  { text: "A little progress each day adds up to big results.", author: "- Satya Nani" },
+  { text: "The future depends on what you do today.", author: "- Mahatma Gandhi" },
+  { text: "Success is not the key to happiness. Happiness is the key to success.", author: "- Albert Schweitzer" },
+  { text: "It always seems impossible until it's done.", author: "- Nelson Mandela" },
+];
 
 // External link button component
 // This component is used to create a button that opens an external link in a new tab
@@ -49,7 +58,12 @@ const formatDuration = (startTime, endTime) => {
 function App() {
   useEffect(() => {
     // useEffect is a hook that allows us to run side effects in functional components
+    checkNotifications(); // Check for notifications on initial load
+    
+    const intervalId = setInterval(checkNotifications, 60000); // Polling Notifications every minute
+    // Fetch initial todos
     fetchTodos();
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, []); // empty array as last argument means that the effect will only run once (on render of webpage)
 
   // useState is a hook that allows us to add state to our functional components
@@ -68,6 +82,17 @@ function App() {
   const [repeatDays, setRepeatDays] = useState(0); // Bitmask for selected days
   const [repeatEndDate, setRepeatEndDate] = useState(""); // Stop date for repeat events
   const [showForm, setShowForm] = useState(false); // State to control the visibility of the form
+  const [buttonPopup, setButtonPopup] = useState(false); // State to control the visibility of the popup
+  const [timePopup, setTimePopup] = useState(false); // State to control the visibility of the time popup
+  const [quote, setQuote] = useState({text: "", author: ""}); // Store the current quote and author
+  const [notificationContent, setNotificationContent] = useState({title: "", message: "", time: ""}); // Store the notification content 
+
+  // Function to display a random quote
+  const displayRandomQuote = () => {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    setQuote(quotes[randomIndex]);
+    setButtonPopup(true);
+  };
 
   // Constants for todo types that match backend model
   const TODO_TYPES = {
@@ -123,7 +148,9 @@ function App() {
     // Create notification datetime by combining due date and notify time
     let notifyDateTime = null;
     if (dueDate && notifyTime) {
-      notifyDateTime = `${dueDate}T${notifyTime}:00`;
+        // Convert Notification time to local time
+        const localDate = new Date(`${dueDate}T${notifyTime}`);
+        notifyDateTime = localDate.toISOString(); // Convert time for backend
     }
 
     // If repeat end date is not provided, set it to null
@@ -220,6 +247,33 @@ function App() {
       console.error("Error deleting todo:", error);
     }
   };
+
+
+// Function to check for notifications every minute
+const checkNotifications = async () => {
+  try {
+    const response = await fetch('https://ryanfortune.pythonanywhere.com/api/todos/notify/');
+    const data = await response.json();
+    
+    if (data.length > 0) {
+      // Show notification popup for each pending notification
+      data.forEach(notification => {
+        // Display notification time in local format
+        const notifyTime = new Date(notification.notify_time).toLocaleTimeString();
+        setTimePopup(true);
+        // Update popup content
+        setNotificationContent({
+          title: `Notification for ${notification.title}`,
+          time: `Time : ${notifyTime}`,
+          message: notification.description,
+        });
+      });
+    }
+  } catch (error) {
+    console.error('Error checking notifications:', error);
+  }
+};
+
 
   /*
     formatTodosForCalendar function logic:
@@ -325,6 +379,21 @@ function App() {
       <ExternalButtonLink url="https://novoconnect.ncf.edu">
         NovoConnect
       </ExternalButtonLink>
+
+      <button onClick={displayRandomQuote}> Need motivation?</button>
+
+      <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+        <p>{quote.text}</p>
+        <p>{quote.author}</p>
+      </Popup>
+
+
+      <Popup trigger={timePopup} setTrigger={setTimePopup}>
+          <h3>{notificationContent.title}</h3>
+          <p>{notificationContent.time}</p>
+          <p>{notificationContent.message}</p>
+        </Popup>
+  
 
       {/* Calendar component for creating events that receives and displays the formatted todo events */}
       <Calendar events={formatTodosForCalendar()} />

@@ -75,6 +75,9 @@ NovaTask is a full-stack application using a Django backend and a React frontend
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select - The HTML Select element
 - https://www.geeksforgeeks.org/bit-manipulation-in-javascript/ -Bit manipulation in JavaScript
 
+- https://www.youtube.com/watch?v=i8fAO_zyFAM - Build a POPUP component in React JS 
+- https://www.youtube.com/watch?v=NmstSmMykqc&t=504s- Random Quote Generator
+
 Resources for hosting:
 https://www.youtube.com/watch?v=XMGOfJxnH7s (Vite react to netlify)
 pythonanywhere backend hosting - Wes (TA)

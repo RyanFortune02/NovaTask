@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"; // State is a way for us to hold da
 import Calendar from "./components/Calendar"; // Import the Calendar component
 import "./App.css";
 import Popup  from "./components/Popup";
+import ClassTimeTracker from './components/ClassTimeTracker'; // Import the ClassTimeTracker component
 
 // Array of motivational quotes
 const quotes = [
@@ -130,7 +131,7 @@ function App() {
     try {
       // make an api request to get all the todos
       const response = await fetch(
-        "https://ryanfortune.pythonanywhere.com/api/todos/"
+        "http://localhost:8000/api/todos/"
       ); // fetch is a built-in function that allows us to make network requests
       const data = await response.json(); // structuring the data in json format
       setTodos(data);
@@ -177,7 +178,7 @@ function App() {
     };
     try {
       const response = await fetch(
-        "https://ryanfortune.pythonanywhere.com/api/todos/",
+        "http://localhost:8000/api/todos/",
         {
           method: "POST", // POST is used to send data to the server
           headers: {
@@ -195,6 +196,10 @@ function App() {
       setStartTime("");
       setEndTime("");
       setRepeatEndDate(""); // Clear repeat end date after successful addition
+      setRepeatType("N"); // Reset repeat type to "Never"
+      setRepeatFrequency(1); // Reset repeat frequency to 1
+      setRepeatDays(0); // Reset repeat days bitmask
+      setNotifyTime(""); // Reset notify time
     } catch (error) {
       console.error("Error adding todo:", error);
     }
@@ -211,7 +216,7 @@ function App() {
   const toggleComplete = async (todo) => {
     try {
       const response = await fetch(
-        `https://ryanfortune.pythonanywhere.com/api/todos/${todo.id}/`,
+        `http://localhost:8000/api/todos/${todo.id}/`,
         {
           method: "PUT", // PUT is used to update data on the server
           headers: {
@@ -239,7 +244,7 @@ function App() {
 
   const deleteTodo = async (id) => {
     try {
-      await fetch(`https://ryanfortune.pythonanywhere.com/api/todos/${id}/`, {
+      await fetch(`http://localhost:8000/api/todos/${id}/`, {
         method: "DELETE", // DELETE is used to delete data on the server
       });
       setTodos((prev) => prev.filter((todo) => todo.id !== id)); // filtering out the todo with the id that we want to delete
@@ -252,7 +257,7 @@ function App() {
 // Function to check for notifications every minute
 const checkNotifications = async () => {
   try {
-    const response = await fetch('https://ryanfortune.pythonanywhere.com/api/todos/notify/');
+    const response = await fetch('http://localhost:8000/api/todos/notify/');
     const data = await response.json();
     
     if (data.length > 0) {
@@ -394,6 +399,11 @@ const checkNotifications = async () => {
           <p>{notificationContent.message}</p>
         </Popup>
   
+
+      {/*Class Time Tracker Component*/}
+      <div className="time-tracking-section">
+        <ClassTimeTracker todos={todos} />
+      </div>
 
       {/* Calendar component for creating events that receives and displays the formatted todo events */}
       <Calendar events={formatTodosForCalendar()} />

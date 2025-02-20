@@ -1,0 +1,138 @@
+.tracker {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    color: #fff;
+  }
+  
+  .tracker h2 {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Flexbox for form and entries */
+  .tracker-content {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .tracker-form,
+  .tracker-entries {
+    flex: 1;
+    padding: 1rem;
+    background-color: #333;
+    border-radius: 8px;
+  }
+
+    /* Form styles */
+  .tracker-form > div {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .tracker-form label {
+    width: 100px;
+    text-align: right;
+  }
+  
+  .tracker-form input,
+  .tracker-form select {
+    padding: 0.5rem;
+    background-color: #3a3a3a;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 4px;
+    height: 36px;
+    min-width: 60px;
+  }
+  
+  .tracker-form select {
+    min-width: 150px;
+  }
+
+  /* Week navigation container */
+  .tracker-form .week-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .tracker-form .week-nav span {
+    min-width: 150px;
+    text-align: center;
+  }
+
+  /* Form's Buttons */
+  .tracker-form button {
+    padding: 0.75rem 1.5rem;
+    background-color: #646cff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .tracker-form button:hover {
+    background-color: #535bf2;
+  }
+  
+  /* Entries section */
+  .tracker-entries {
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  .tracker-entries h3 {
+    margin-bottom: 1rem;
+  }
+  
+  .tracker-entries > div {
+    background-color: #444;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+  
+    /* Highlight selected entry */
+  .selected {
+    background-color: #4a4a4a;
+    transform: scale(1.02);
+  }
+  
+  /* Track Form buttons Style */
+  .tracker-entries button {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .tracker-entries button:hover {
+    background-color: #cc0000;
+  }
+
+  /* Scrollbar styles */
+  .tracker-entries::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .tracker-entries::-webkit-scrollbar-track {
+    background: #2a2a2a;
+  }
+
+  .tracker-entries::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+  }
+
+  .tracker-entries::-webkit-scrollbar-thumb:hover {
+    background: #666;
+  }

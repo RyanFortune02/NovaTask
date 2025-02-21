@@ -1,5 +1,6 @@
 from datetime import timedelta
 from django.utils import timezone
+from django.db.models import QuerySet
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -113,18 +114,18 @@ def time_entries(request):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-@api_view(["GET", "PUT", "DELETE"])
-def time_entry_detail(request, pfk):
+@api_view(["GET", "DELETE"])
+def time_entry_by_foreign(request, fpk):
     try:
         try:
-            fk = Todo.objects.get(pfk)
+            fk = Todo.objects.get(id=fpk)
         except:
             return Response(
-                {"error": f'Todo not found for primary key: "{pfk}"'},
+                {"error": f'Todo not found for primary key: "{fpk}"'},
                 status=status.HTTP_404_NOT_FOUND,
             )
         # There could be more than one! Beware!
-        time_entries = TimeEntry.objects.get(todo=fk)
+        time_entries = TimeEntry.objects.filter(todo=fk)
     except TimeEntry.DoesNotExist:
         return Response(
             {"error": f'TimeEntry not found for foriegn key: "{fk}"'},
@@ -136,9 +137,39 @@ def time_entry_detail(request, pfk):
         serializer = TimeEntrySerializer(time_entries, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    elif request.method == "DELETE":
+        # Delete
+        try:
+            for time_entry in time_entries:
+                time_entry.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except:
+            message = "The server refuses to brew coffee because it is, permanently, a teapot."
+            return Response({"error": message}, status=status.HTTP_418_IM_A_TEAPOT)
+
+    else:
+        # Something not allowed.
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+@api_view(["GET", "PUT", "DELETE"])
+def time_entry_detail(request, pk):
+    try:
+        time_entry = TimeEntry.objects.get(id=pk)
+    except TimeEntry.DoesNotExist:
+        return Response(
+            {"error": f'TimeEntry not found for primary key: "{pk}"'},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    if request.method == "GET":
+        # Retrieve
+        serializer = TimeEntrySerializer(time_entry)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     elif request.method == "PUT":
         # Update
-        serializer = TimeEntrySerializer(time_entries, data=request.data)
+        serializer = TimeEntrySerializer(time_entry, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -147,7 +178,7 @@ def time_entry_detail(request, pfk):
     elif request.method == "DELETE":
         # Delete
         try:
-            time_entries.delete()
+            time_entry.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except:
             message = "The server refuses to brew coffee because it is, permanently, a teapot."

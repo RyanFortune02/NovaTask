@@ -4,6 +4,7 @@ from .views import (
     todo_detail,
     check_notifications,
     time_entries,
+    time_entry_by_foreign,
     time_entry_detail,
 )
 
@@ -12,5 +13,6 @@ urlpatterns = [
     path("todos/<int:pk>/", todo_detail),
     path("todos/notify/", check_notifications),
     path("times/", time_entries),
-    path("times/<int:fpk>/", time_entry_detail),
+    path("times/<int:fpk>/", time_entry_by_foreign),
+    path("times/micromanage/<int:pk>/", time_entry_detail),
 ]

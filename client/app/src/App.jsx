@@ -412,9 +412,8 @@ function App() {
         <ExternalButtonLink url="https://www.ncf.edu/wp-content/uploads/2025/02/2024-2025_UG_NCF-Academic-Calendar_Comprehensive_web4.pdf">
           NCF Deadlines
         </ExternalButtonLink>
+        <button onClick={displayRandomQuote}> Need motivation?</button>
       </div>
-
-      <button onClick={displayRandomQuote}> Need motivation?</button>
 
       <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
         <p>{quote.text}</p>

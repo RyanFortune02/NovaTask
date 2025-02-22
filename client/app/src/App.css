@@ -186,8 +186,6 @@ button {
   margin-bottom: 2rem; /* Add space between button and calendar */
   transition: background-color 0.3s ease;
   display: block; /* Center the button */
-  margin-left: auto; 
-  margin-right: auto;
 }
 
 .external-button:hover {
@@ -304,9 +302,10 @@ button {
   background-color: #535bf2;
 }
 
-/* buttons  */
+/* buttons */
 .button-group {
   display: flex;
   gap: 10px; /* space between buttons */
   align-items: center;
+  justify-content: center; /* Center the buttons within the container */
 }

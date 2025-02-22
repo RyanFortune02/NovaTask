@@ -162,6 +162,13 @@ function App() {
   };
 
   const addTodo = async () => {
+    // Check required fields before proceeding
+    if (!title || !dueDate || !startTime || !endTime) {
+      alert(
+        "must fill out all required fields (title, due date, start time, end time)"
+      );
+      return;
+    }
     // Create notification datetime by combining due date and notify time
     let notifyDateTime = null;
     if (dueDate && notifyTime) {

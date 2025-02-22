@@ -177,6 +177,12 @@ function App() {
       repeatEndDateTime = `${repeatEndDate}T23:59:59`;
     }
 
+    // Validate that end time is later than start time (to not allow negative entries)
+    if (startTime && endTime && startTime >= endTime) {
+      alert("End time must be later than start time.");
+      return;
+    }
+
     const todoData = {
       title, // when an object has a key and value with the same name, we can use shorthand syntax
       description,
@@ -399,9 +405,14 @@ function App() {
     <>
       <h1>NovaTask</h1>
 
-      <ExternalButtonLink url="https://novoconnect.ncf.edu">
-        NovoConnect
-      </ExternalButtonLink>
+      <div className="button-group">
+        <ExternalButtonLink url="https://novoconnect.ncf.edu">
+          NovoConnect
+        </ExternalButtonLink>
+        <ExternalButtonLink url="https://www.ncf.edu/wp-content/uploads/2025/02/2024-2025_UG_NCF-Academic-Calendar_Comprehensive_web4.pdf">
+          NCF Deadlines
+        </ExternalButtonLink>
+      </div>
 
       <button onClick={displayRandomQuote}> Need motivation?</button>
 

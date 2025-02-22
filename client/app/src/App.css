@@ -303,3 +303,10 @@ button {
 .toggle-form-button:hover {
   background-color: #535bf2;
 }
+
+/* buttons  */
+.button-group {
+  display: flex;
+  gap: 10px; /* space between buttons */
+  align-items: center;
+}

@@ -82,6 +82,12 @@ const ClassTimeTracker = ({ todos }) => {
   };
 
   const addTimeEntry = async () => {
+    // Check for negative time entries, checks wether hoursSpent or minutesSpent is less than 0
+    if (parseInt(hoursSpent || 0) < 0 || parseInt(minutesSpent || 0) < 0) {
+      // || 0 is used to handle empty inputs
+      alert("Time entry can not be negative");
+      return;
+    }
     // Check if selected class and time spent are valid
     if (!selectedClass || (!hoursSpent && !minutesSpent)) return;
 

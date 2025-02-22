@@ -19,7 +19,10 @@
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/rrule": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.3",
     "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
     "rrule": "^2.8.1"
   },

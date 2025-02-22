@@ -28,6 +28,7 @@ NovaTask is a full-stack application using a Django backend and a React frontend
    - Install dependencies:
      ```bash
      yarn install
+     npm install react-bootstrap bootstrap @popperjs/core
      ```
    - Install FullCalendar packages (if not already included in package.json):
      ```bash
@@ -68,6 +69,7 @@ NovaTask is a full-stack application using a Django backend and a React frontend
 
 - https://fullcalendar.io/docs/event-object - Full Calendar Documentation
 - https://www.youtube.com/watch?v=HpfzprSnhUw&t=629s - Django & React FullCalendar Tutorial #1: Overview and Basic Setup of FullCalendar
+- https://www.youtube.com/watch?v=Qr0RclhjF-g&list=LL&index=3 - Add PopOver To FullCalendar (reactjs-fullcalendar)
 - https://fullcalendar.io/docs/rrule-plugin - Rrule Plugin to display recurring events in the Full Calendar
 
 - https://plainenglish.io/blog/react-open-link-in-new-tab# - How to Open a Link in a New Tab in React

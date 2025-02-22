@@ -347,6 +347,10 @@ function App() {
         // Use green color for completed todos
         backgroundColor: todo.completed ? "green" : undefined,
         borderColor: todo.completed ? "green" : undefined,
+        // Add description to the event
+        extendedProps: {
+          description: todo.description,
+        },
       };
 
       // If this is not a recurring event, return simple event format

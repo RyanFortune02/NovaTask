@@ -330,31 +330,6 @@ button {
   padding: 0.75rem 1rem !important;
 }
 
-.todo-actions {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.todo-actions button {
-  padding: 0.5rem 1rem;
-  background-color: #646cff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.todo-actions button:nth-child(2) {
-  background-color: #2196f3;
-}
-
-.todo-actions button:nth-child(3) {
-  background-color: #f44336;
-}
-
 .submit-button, .cancel-button {
   width: 736px;
   height: 40px;
@@ -366,4 +341,14 @@ button {
   cursor: pointer;
   font-size: 1rem;
   display: block; 
+}
+
+.app-container {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  justify-content: center;
+  max-width: 1400px;
+  margin: 0 auto;
 }

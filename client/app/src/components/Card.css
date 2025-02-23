@@ -1,0 +1,103 @@
+.card-container {
+  background-color: #2b2b2b;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-width: 280px;
+  max-width: 320px;
+}
+.card-header title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 0;
+} 
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.card-header .card-title {
+  flex: 1; 
+  text-align: center;
+}
+
+.card-type {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.card-type.todo {
+  background-color: #3b82f6;
+}
+
+.card-type.class {
+  background-color: #a855f7;
+}
+
+.card-body {
+  margin: 0.75rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+}
+
+.card-body p {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem, ;
+  line-height: 1.4;
+}
+
+.card-date {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  opacity: 0.9;
+  margin: 0.5rem 0;
+}
+
+.card-date span {
+  display: block;
+}
+  
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+.edit-btn, .delete-btn {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background-color: #2196f3;
+}
+
+.delete-btn {
+  background-color: #f44336;
+}

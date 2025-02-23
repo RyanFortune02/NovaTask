@@ -4,6 +4,7 @@ import Calendar from "./components/Calendar"; // Import the Calendar component
 import "./App.css";
 import Popup from "./components/Popup";
 import ClassTimeTracker from "./components/ClassTimeTracker"; // Import the ClassTimeTracker component
+import Card from "./components/Card"; // Import the Card component
 
 // Array of motivational quotes
 const quotes = [
@@ -650,35 +651,25 @@ function App() {
         </div>
       </div>
 
+      <div className="app-container">
       {todos.map((todo) => (
-        <div key={todo.id}>
-          <h2>Title: {todo.title}</h2>
-          <p>Type: {formatTodoType(todo.todo_type)}</p>
-          <p>Description: {todo.description}</p>
-          <p>Date: {new Date(todo.due_date).toLocaleDateString()}</p>
-          <p>
-            Time: {todo.start_time} - {todo.end_time}
-            {todo.start_time && todo.end_time && (
-              <span> ({formatDuration(todo.start_time, todo.end_time)})</span> // Format TODO/Class duration
-            )}
-          </p>
-          <p>
-            Notification:{" "}
-            {todo.notify_time
-              ? new Date(todo.notify_time).toLocaleTimeString()
-              : "No notification"}
-          </p>
-          <div className="todo-actions">
-            <input
-              type="checkbox"
-              checked={todo.completed}
-              onChange={() => toggleComplete(todo)}
-            />
-            <button onClick={() => handleEdit(todo)}>Edit</button>
-            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
-          </div>
-        </div>
+        <Card
+          key={todo.id}
+          title={todo.title}
+          type={formatTodoType(todo.todo_type)}
+          description={todo.description}
+          date={ new Date(todo.due_date).toLocaleDateString()}
+          time= {`${todo.start_time} - ${todo.end_time} (${formatDuration(todo.start_time, todo.end_time)})`}
+          notification= {todo.notify_time
+            ? new Date(todo.notify_time).toLocaleTimeString()
+            : "No notification"}
+          completed={todo.completed}
+          onComplete={() => toggleComplete(todo)}
+          onEdit={() => handleEdit(todo)}
+          onDelete={() => deleteTodo(todo.id)}
+        />
       ))}
+      </div>
     </>
   );
 }

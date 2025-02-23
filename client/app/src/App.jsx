@@ -82,6 +82,7 @@ function App() {
   // useState is a hook that allows us to add state to our functional components
   // useState returns an array with two elements: the current state value and a function that allows us to update the state value
   const [todos, setTodos] = useState([]);
+  const [editingTodoId, setEditingTodoId] = useState(null); // Store the todo being edited
   // state for each input field
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -104,6 +105,22 @@ function App() {
     time: "",
   }); // Store the notification content
 
+  // Function to handle editing a todo item by setting the editingTodo state
+  const handleEdit = (todo) => {
+    setEditingTodoId(todo.id);
+    setTitle(todo.title);
+    setDescription(todo.description);
+    setDueDate(todo.due_date);
+    setStartTime(todo.start_time || '');
+    setEndTime(todo.end_time || '');
+    setTodoType(todo.todo_type);
+    setRepeatType(todo.repeat_type);
+    setRepeatFrequency(todo.repeat_frequency);
+    setRepeatDays(todo.repeat_days);
+    setRepeatEndDate(todo.repeat_end_time?.split('T')[0] || '');
+    setNotifyTime(todo.notify_time?.split('T')[1]?.slice(0, 5) || '');
+    setShowForm(true);
+  };
   // Function to display a random quote
   const displayRandomQuote = () => {
     const randomIndex = Math.floor(Math.random() * quotes.length);
@@ -206,32 +223,58 @@ function App() {
       repeat_end_time: repeatEndDateTime,
     };
     try {
-      const response = await fetch(
-        "https://ryanfortune.pythonanywhere.com/api/todos/",
+      const url = editingTodoId 
+      ? `https://ryanfortune.pythonanywhere.com/api/todos/${editingTodoId}/`
+      : "https://ryanfortune.pythonanywhere.com/api/todos/";
+
+      const method = editingTodoId ? "PUT" : "POST"; // Use PUT for editing existing todos and POST for new todos
+
+      const response = await fetch( url,
         {
-          method: "POST", // POST is used to send data to the server
-          headers: {
-            "Content-Type": "application/json", // Specifying the format of the data we are sending
-          },
+          method, // Use the method determined above
+          headers: { "Content-Type": "application/json"}, // Specifying the format of the data we are sending
           body: JSON.stringify(todoData), // Converts a JavaScript object or value to a JSON string
-        }
-      );
+        });
+
       const data = await response.json();
-      setTodos((prevTodos) => [data, ...prevTodos]); // New todo added first, followed by previous entries
-      // Clear form after successful addition
-      setTitle("");
-      setDescription("");
-      setDueDate("");
-      setStartTime("");
-      setEndTime("");
-      setRepeatEndDate(""); // Clear repeat end date after successful addition
-      setRepeatType("N"); // Reset repeat type to "Never"
-      setRepeatFrequency(1); // Reset repeat frequency to 1
-      setRepeatDays(0); // Reset repeat days bitmask
-      setNotifyTime(""); // Reset notify time
+
+      // Update the todos state with the new todo
+      setTodos((prev) => {
+        if (editingTodoId) {
+          // If editing an existing todo, update the todo in the list
+          return prev.map((t) => (t.id === editingTodoId ? data : t));
+        } else {
+          // If adding a new todo, add the new todo to the list
+          return [...prev, data];
+        }
+      }
+      );
+      resetForm(); // Clear the form after successful addition
     } catch (error) {
       console.error("Error adding todo:", error);
     }
+  };
+
+  const resetForm = () => {
+    // Clear form after successful addition
+    setTitle("");
+    setDescription("");
+    setDueDate("");
+    setStartTime("");
+    setEndTime("");
+    setRepeatEndDate(""); // Clear repeat end date after successful addition
+    setRepeatType("N"); // Reset repeat type to "Never"
+    setRepeatFrequency(1); // Reset repeat frequency to 1
+    setRepeatDays(0); // Reset repeat days bitmask
+    setNotifyTime(""); // Reset notify time
+    setEditingTodoId(null); // Reset editing todo ID
+    setShowForm(false); // Hide the form after successful addition
+    setTodoType("TODO"); // Reset todo type
+  };
+
+  // Add a cancel edit function
+  const cancelEdit = () => {
+    resetForm();
   };
 
   /*
@@ -412,6 +455,16 @@ function App() {
     setShowForm(!showForm);
   };
 
+  const handleSubmit = async () => {
+    try {
+      // Add or update todo based on editing state
+      await addTodo();
+      
+    } catch (error) {
+      console.error("Error submitting todo:", error);
+    }
+  };
+
   return (
     <>
       <h1>NovaTask</h1>
@@ -584,7 +637,16 @@ function App() {
               placeholder="Select notification time"
             />
           </div>
-          <button onClick={addTodo}>Add Todo</button>
+          <div className="button-group">
+            <button onClick={handleSubmit} className="submit-button">
+              {editingTodoId ? "Update Todo" : "Add Todo"}
+            </button>
+                {editingTodoId && (
+                <button onClick={cancelEdit} className="cancel-button">
+                  Cancel Edit
+                </button>
+              )}
+            </div>
         </div>
       </div>
 
@@ -606,12 +668,15 @@ function App() {
               ? new Date(todo.notify_time).toLocaleTimeString()
               : "No notification"}
           </p>
-          <input
-            type="checkbox"
-            checked={todo.completed}
-            onChange={() => toggleComplete(todo)}
-          />
-          <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+          <div className="todo-actions">
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() => toggleComplete(todo)}
+            />
+            <button onClick={() => handleEdit(todo)}>Edit</button>
+            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+          </div>
         </div>
       ))}
     </>

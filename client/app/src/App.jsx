@@ -105,6 +105,8 @@ function App() {
     message: "",
     time: "",
   }); // Store the notification content
+  const [showTimeTracker, setShowTimeTracker] = useState(true); // State to control the visibility of the time tracker
+  const [ClicktoShowHours, setClicktoShowHours] = useState(false); 
 
   // Function to handle editing a todo item by setting the editingTodo state
   const handleEdit = (todo) => {
@@ -128,6 +130,11 @@ function App() {
     setQuote(quotes[randomIndex]);
     setButtonPopup(true);
   };
+
+  // Function to display Hours 
+  const displayHours = () => {
+    setClicktoShowHours(true);
+  }
 
   // Constants for todo types that match backend model
   const TODO_TYPES = {
@@ -477,7 +484,17 @@ function App() {
         <ExternalButtonLink url="https://www.ncf.edu/wp-content/uploads/2025/02/2024-2025_UG_NCF-Academic-Calendar_Comprehensive_web4.pdf">
           NCF Deadlines
         </ExternalButtonLink>
+        <ExternalButtonLink url="https://ncf.mywconline.com/schedule/calendar?scheduleid=sc66bb4dcdcf333">
+          Academic Support Centers
+        </ExternalButtonLink>
+        <ExternalButtonLink url="https://www.ncf.edu/life-at-new/where-to-eat/">
+          Dinning Services
+        </ExternalButtonLink>
+      </div>
+
+      <div className="popup-buttons-container">
         <button onClick={displayRandomQuote}> Need motivation?</button>
+        <button onClick={displayHours}> What time does it close?</button>
       </div>
 
       <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
@@ -491,9 +508,31 @@ function App() {
         <p>{notificationContent.message}</p>
       </Popup>
 
-      {/*Class Time Tracker Component*/}
-      <div className="time-tracking-section">
-        <ClassTimeTracker todos={todos} />
+      <Popup trigger={ClicktoShowHours} setTrigger={setClicktoShowHours}>
+        <br></br>
+        <h3>Career Engagement & Opportunity (CEO)</h3>
+        <p>Monday - Friday: 8am - 5pm </p>
+
+        <h3>Academic Resource Center (ARC)</h3>
+        <p>Monday - Thursday: 8am - 11pm </p>
+        <p>Friday: 8am - 5pm</p>
+        <p>Saturday: 12pm - 6pm</p>
+        <p>Sunday: 3pm - 11pm</p>
+
+        <h3>Counseling & Wellness Services (CWC)</h3>
+        <p>Monday - Friday: 8am - 5pm </p>
+
+      </Popup>
+
+     {/* Class Time Tracker Section */}
+      <div className="time-tracking-container">
+        <button className="toggle-form-button" onClick={() => setShowTimeTracker(!showTimeTracker)}>
+          {showTimeTracker ? "Hide Time Tracker" : "Add Time Entry for a class"}
+        </button>
+        
+        <div className={`time-tracking-section ${showTimeTracker ? "visible" : "hidden"}`}>
+          <ClassTimeTracker todos={todos} />
+        </div>
       </div>
 
       {/* Calendar component for creating events that receives and displays the formatted todo events */}

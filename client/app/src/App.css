@@ -11,6 +11,10 @@ body {
   text-align: center;
 }
 
+h1 {
+  font-size: 3.2em;
+  margin-bottom: 0.5em;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -143,6 +147,7 @@ button {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+  
 }
 
 /* Calendar's Style */
@@ -352,3 +357,31 @@ button {
   max-width: 1400px;
   margin: 0 auto;
 }
+
+.time-tracking-container {
+  margin: 1rem auto;
+}
+
+.time-tracking-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+  height: auto;
+  overflow: visible;
+}
+
+.time-tracking-section.hidden {
+  opacity: 0;
+  transform: translateY(-20px);
+  height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.popup-buttons-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;  
+  margin: 20px 0; 
+}
+

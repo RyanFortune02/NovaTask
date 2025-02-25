@@ -1,8 +1,10 @@
 # NovaTask
 
+## Hosted at: https://banyanplanner.netlify.app/
+
 ## Overview
 
-NovaTask is a full-stack application using a Django backend and a React frontend (powered by Vite). This guide covers the required installations and steps needed to run the project after cloning the repository.
+NovaTask is a full-stack application using a Django backend and a React frontend (powered by Vite). This guide covers the required installations and steps needed to run the project after cloning the repository locally.
 
 ## Prerequisites
 
@@ -60,6 +62,30 @@ NovaTask is a full-stack application using a Django backend and a React frontend
      ```
    - The backend will be available at [http://localhost:8000/](http://localhost:8000/).
 
+## Local Development vs Deployment
+
+When running the application locally, you need to ensure the frontend is making API calls to your local Django server:
+
+1. **For Local Development**
+
+   - All API calls in your React components should use the URL `http://localhost:8000/api/` instead of the deployed URL.
+   - Look for API calls in frontend (client/app/src) and make sure they're pointing to localhost:8000.
+   - Example change:
+
+     ```javascript
+     // Change this:
+     fetch("https://ryanfortune.pythonanywhere.com/api/todos/");
+
+     // To this for local development:
+     fetch("http://localhost:8000/api/todos/");
+     ```
+
+   - Using local variables to easily switch between local and hosted api url's would have been the best approach
+
+2. **CORS Configuration**
+   - The Django backend is already configured with `CORS_ALLOW_ALL_ORIGINS = True` in settings.py, which allows requests from any origin including localhost.
+   - This is suitable for development but should be restricted in production.
+
 ## Resources used:
 
 - https://www.youtube.com/watch?v=xldTxXtNiuk (for base of project and logic on connecting vite React with Django)
@@ -77,9 +103,9 @@ NovaTask is a full-stack application using a Django backend and a React frontend
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select - The HTML Select element
 - https://www.geeksforgeeks.org/bit-manipulation-in-javascript/ -Bit manipulation in JavaScript
 
-- https://www.youtube.com/watch?v=i8fAO_zyFAM - Build a POPUP component in React JS 
+- https://www.youtube.com/watch?v=i8fAO_zyFAM - Build a POPUP component in React JS
 - https://www.youtube.com/watch?v=NmstSmMykqc&t=504s- Random Quote Generator
-- https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar - webkit-scrollbar for Class Time Tracker styling 
+- https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar - webkit-scrollbar for Class Time Tracker styling
 - https://www.youtube.com/watch?v=Ts3kTbdQ_4U - Build a Customizable Card Component in ReactJS for TODO/Class list display
 - https://react-bootstrap.github.io/docs/components/overlays/#popovers - Popover React Bootstrap for FullCalendar
 
@@ -89,3 +115,5 @@ pythonanywhere backend hosting - Wes (TA)
 
 Link for frontend(may not be hosted at time of checking link):
 https://banyanplanner.netlify.app/
+
+- followed the netlify docs to host

@@ -79,6 +79,9 @@ NovaTask is a full-stack application using a Django backend and a React frontend
 
 - https://www.youtube.com/watch?v=i8fAO_zyFAM - Build a POPUP component in React JS 
 - https://www.youtube.com/watch?v=NmstSmMykqc&t=504s- Random Quote Generator
+- https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar - webkit-scrollbar for Class Time Tracker styling 
+- https://www.youtube.com/watch?v=Ts3kTbdQ_4U - Build a Customizable Card Component in ReactJS for TODO/Class list display
+- https://react-bootstrap.github.io/docs/components/overlays/#popovers - Popover React Bootstrap for FullCalendar
 
 Resources for hosting:
 https://www.youtube.com/watch?v=XMGOfJxnH7s (Vite react to netlify)

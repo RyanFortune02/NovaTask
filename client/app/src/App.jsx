@@ -121,9 +121,23 @@ function App() {
     setRepeatFrequency(todo.repeat_frequency);
     setRepeatDays(todo.repeat_days);
     setRepeatEndDate(todo.repeat_end_time?.split('T')[0] || '');
-    setNotifyTime(todo.notify_time?.split('T')[1]?.slice(0, 5) || '');
+
+    // Fix wrong display of notify time when editing form
+    if (todo.notify_time){
+      const notifyDate = new Date(todo.notify_time);
+      setNotifyTime(
+        notifyDate.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        })
+      );
+    } else {
+      setNotifyTime('');
+    }
     setShowForm(true);
   };
+
   // Function to display a random quote
   const displayRandomQuote = () => {
     const randomIndex = Math.floor(Math.random() * quotes.length);
@@ -396,8 +410,10 @@ function App() {
         id: todo.id.toString(), // Convert ID to string for FullCalendar
         title: todo.title, // Event title to display
         // Use green color for completed todos
-        backgroundColor: todo.completed ? "green" : undefined,
-        borderColor: todo.completed ? "green" : undefined,
+        backgroundColor: todo.completed ? "green" :
+                        todo.todo_type == "CLASS" ? "#a855f7" : undefined, // Change color of class type to purple
+        borderColor: todo.completed ? "green" :
+                    todo.todo_type == "CLASS" ? "#a855f7" : undefined,
         // Add description to the event
         extendedProps: {
           description: todo.description,
@@ -631,6 +647,8 @@ function App() {
                     : ""}
                 </span>
               </div>
+              {/*Only display days selector when repeat type is weekly*/}
+              {repeatType === REPEAT_TYPES.WEEKS && (
               <div className="form-row">
                 <label>Repeat on:</label>
                 <div className="days-selector">
@@ -656,6 +674,7 @@ function App() {
                   ))}
                 </div>
               </div>
+              )}
               <div className="form-row">
                 <label>Until:</label>
                 <input
